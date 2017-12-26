@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Fabricante;
 
 class FabricanteController extends Controller
 {
@@ -13,7 +14,10 @@ class FabricanteController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            ['datos'=>Fabricante::all()], 
+            202
+        );
     }
 
     /**
@@ -45,7 +49,17 @@ class FabricanteController extends Controller
      */
     public function show($id)
     {
-        //
+        $fabricante=Fabricante::find($id);
+        if (!$fabricante) {
+            return response()->json(
+                ['mensaje'=>'No se encuentra al fabricante', 'codigo'=>404],
+                404
+            );
+        }
+        return response()->json(
+            ['datos'=>$fabricante],
+            202
+        );
     }
 
     /**
