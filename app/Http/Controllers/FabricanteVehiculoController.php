@@ -7,6 +7,7 @@ use App\Fabricante;
 
 class FabricanteVehiculoController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

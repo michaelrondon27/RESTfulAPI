@@ -7,6 +7,12 @@ use App\Fabricante;
 
 class FabricanteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth.basic', ['only'=>['store', 'update', 'destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,16 +26,6 @@ class FabricanteController extends Controller
             ], 
             202
         );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -67,17 +63,6 @@ class FabricanteController extends Controller
             ],
             202
         );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
