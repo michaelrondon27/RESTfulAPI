@@ -50,9 +50,9 @@ class FabricanteVehiculoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        if(!$request->has(['color', 'cilindraje', 'peso', 'fabricante_id', 'potencia'])){
+        if(!$request->has(['color', 'cilindraje', 'peso', 'potencia'])){
             return response()->json(
                 [
                     'mensaje'=>'Datos inválidos o incompletos',
@@ -61,7 +61,7 @@ class FabricanteVehiculoController extends Controller
                 422
             );
         }
-        $fabricante=Fabricante::find($request->has('fabricante_id'));
+        $fabricante=Fabricante::find($request->has($id));
         if(!$fabricante){
             return response()->json(
                 [
@@ -72,6 +72,7 @@ class FabricanteVehiculoController extends Controller
             );
         }
         $vehiculo=new Vehiculo($request->all());
+        $vehiculo->fabricante_id=$id;
         $vehiculo=save();
         return response()->json(
                 [
