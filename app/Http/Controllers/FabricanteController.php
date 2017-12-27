@@ -92,6 +92,15 @@ class FabricanteController extends Controller
     {
         $metodo=$request->method();
         $fabricante=Fabricante::find($id);
+        if(!$fabricante){
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al fabricante',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
         $flag=false;
         if ($metodo==="PATCH") {
             $nombre=$request->has('nombre');
@@ -145,6 +154,33 @@ class FabricanteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $fabricante=Fabricante::find($id);
+        if (!$fabricante) {
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al fabricante',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $vehiculos=$fabricante->vehiculos;
+        if (sizeof($vehiculos)>0) {
+            return response()->json(
+                [
+                    'mensaje'=>'El fabricante posee vehiculos y no se puede eliminar, elimine los vehiculos primero',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $fabricante->delete();
+        return response()->json(
+            [
+                'mensaje'=>'El fabricante ha sido eliminado',
+                'codigo'=>'202'
+            ], 
+            202
+        );
     }
 }

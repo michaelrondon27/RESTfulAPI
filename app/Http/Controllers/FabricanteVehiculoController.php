@@ -129,7 +129,7 @@ class FabricanteVehiculoController extends Controller
         if(!$vehiculo){
             return response()->json(
                 [
-                    'mensaje'=>'No se encuentra al fabricante',
+                    'mensaje'=>'No se encuentra al vehiculo',
                     'codigo'=>'404'
                 ], 
                 404
@@ -196,8 +196,35 @@ class FabricanteVehiculoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idFabricante, $idVehiculo)
     {
-        //
+        $fabricante=Fabricante::find($idFabricante);
+        if(!$fabricante){
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al fabricante',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $vehiculo=$fabricante->vehiculos()->find($idVehiculo);
+        if(!$vehiculo){
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al vehiculo',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $vehiculo->delete();
+        return response()->json(
+            [
+                'mensaje'=>'El vehiculo ha sido eliminado',
+                'codigo'=>'202'
+            ], 
+            202
+        );
     }
 }
