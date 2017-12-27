@@ -36,7 +36,23 @@ class FabricanteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!$request->has(['nombre', 'telefono'])){
+            return response()->json(
+                [
+                    'mensaje'=>'Datos inválidos o incompletos',
+                    'codigo'=>'422'
+                ], 
+                422
+            );
+        }
+        $fabricante=new Fabricante($request->all());
+        $fabricante->save();
+        return response()->json(
+            [
+                'mensaje'=>'El fabricante ha sido creado'
+            ], 
+            202
+        );
     }
 
     /**
