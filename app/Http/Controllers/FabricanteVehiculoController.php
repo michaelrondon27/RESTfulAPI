@@ -112,9 +112,82 @@ class FabricanteVehiculoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $idFabricante, $idVehiculo)
     {
-        //
+        $metodo=$request->method();
+        $fabricante=Fabricante::find($idFabricante);
+        if(!$fabricante){
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al fabricante',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $vehiculo=$fabricante->vehiculos()->find($idVehiculo);
+        if(!$vehiculo){
+            return response()->json(
+                [
+                    'mensaje'=>'No se encuentra al fabricante',
+                    'codigo'=>'404'
+                ], 
+                404
+            );
+        }
+        $color=$request->has('color');
+        $potencia=$request->has('potencia');
+        $cilindraje=$request->has('cilindraje');
+        $peso=$request->has('peso');
+        $flag=false;
+        if ($metodo==="PATCH") {
+            if ($color!=null && $color!='') {
+                $vehiculo->color=$color;
+                $flag=true;
+            }
+            if ($potencia!=null && $potencia!='') {
+                $vehiculo->potencia=$potencia;
+                $flag=true;
+            }
+            if ($cilindraje!=null && $cilindraje!='') {
+                $vehiculo->cilindraje=$cilindraje;
+                $flag=true;
+            }
+            if ($peso!=null && $peso!='') {
+                $vehiculo->peso=$peso;
+                $flag=true;
+            }
+            if ($flag) {
+                $vehiculo->save();
+            }
+            return response()->json(
+                [
+                    'mensaje'=>'El vehiculo ha sido editado',
+                    'codigo'=>'202'
+                ], 
+                202
+            );
+        }
+        if (!$color || !$potencia || !$cilindraje || !$peso) {
+            return response()->json(
+                [
+                    'mensaje'=>'Datos inválidos'
+                ], 
+                404
+            );
+        }
+        $vehiculo->color=$color;
+        $vehiculo->potencia=$potencia;
+        $vehiculo->cilindraje=$cilindraje;
+        $vehiculo->peso=$peso;
+        $vehiculo->save();
+        return response()->json(
+            [
+                'mensaje'=>'El vehiculo ha sido editado',
+                'codigo'=>'202'
+            ], 
+            202
+        );
     }
 
     /**

@@ -92,16 +92,21 @@ class FabricanteController extends Controller
     {
         $metodo=$request->method();
         $fabricante=Fabricante::find($id);
+        $flag=false;
         if ($metodo==="PATCH") {
             $nombre=$request->has('nombre');
             if ($nombre!=null && $nombre!='') {
                 $fabricante->nombre=$nombre;
+                $flag=true;
             }
             $telefono=$request->has('telefono');
             if ($telefono!=null && $telefono!='') {
                 $fabricante->telefono=$telefono;
+                $flag=true;
             }
-            $fabricante->save();
+            if ($flag) {
+                $fabricante->save();
+            }
             return response()->json(
                 [
                     'mensaje'=>'El fabricante ha sido editado',
